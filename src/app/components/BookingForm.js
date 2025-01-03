@@ -121,34 +121,41 @@ const BookingForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const response = await fetch(`${API_URL}/api/bookings`);
+  try {
+    const response = await fetch(`${API_URL}/api/bookings`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (response.ok) {
-        setMessage("Booking confirmed! Thank you for your reservation.");
-        setFormData({
-          date: "",
-          time: "",
-          guests: "",
-          name: "",
-          email: "",
-          phone: "",
-        });
-        setAvailableSlots([]);
-      } else {
-        setMessage(data.error || "Something went wrong. Please try again.");
-      }
-    } catch (error) {
-      setMessage("Error submitting booking. Please try again.");
-    } finally {
-      setLoading(false);
+    if (response.ok) {
+      setMessage("Booking confirmed! Thank you for your reservation.");
+      setFormData({
+        date: "",
+        time: "",
+        guests: "",
+        name: "",
+        email: "",
+        phone: "",
+      });
+      setAvailableSlots([]);
+    } else {
+      setMessage(data.error || "Something went wrong. Please try again.");
     }
-  };
+  } catch (error) {
+    console.error('Booking error:', error);
+    setMessage("Error submitting booking. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const today = new Date().toISOString().split("T")[0];
 
