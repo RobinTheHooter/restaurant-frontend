@@ -146,6 +146,7 @@ const BookingForm = () => {
         phone: "",
       });
       setAvailableSlots([]);
+      location.reload();
     } else {
       setMessage(data.error || "Something went wrong. Please try again.");
     }
